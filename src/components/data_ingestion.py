@@ -7,6 +7,9 @@ from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformationConfig
+from src.components.model_trainer import ModelTrainerConfig, ModelTrainer
+
+
 
 # We will create a class DataIngestionConfig to store inputs such as file paths
 @dataclass
@@ -48,11 +51,20 @@ class DataIngestion:
         except Exception as e:
             raise  CustomException(e,sys)
 if __name__=="__main__":
+
+    logging.info(f"Executing Data Ingestions")
     obj=DataIngestion()
     train_data, test_data= obj.initiate_data_ingestion()
 
+    logging.info(f"Executing Data Transformation")
     data_transformation = DataTransformation()
-    data_transformation.initiate_data_transformation(train_data, test_data)
+    train_arr, test_arr,_=data_transformation.initiate_data_transformation(train_data, test_data)
+
+    logging.info(f"Executing ModelTrainer")
+
+    model_trainer= ModelTrainer()
+    print(model_trainer.initiate_model_trainer(train_arr, test_arr))
+    
 
 
     
